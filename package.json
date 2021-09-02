@@ -1,0 +1,38 @@
+{
+  "name": "nitro-imager",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "dependencies": {
+    "bytebuffer": "^5.0.1",
+    "canvas": "^2.8.0",
+    "chalk": "^4.1.2",
+    "dotenv": "^10.0.0",
+    "express": "^4.17.1",
+    "node-fetch": "^2.6.1",
+    "pako": "^2.0.4"
+  },
+  "devDependencies": {
+    "@types/bytebuffer": "^5.0.42",
+    "@types/chalk": "^2.2.0",
+    "@types/express": "^4.17.13",
+    "@types/node": "^14.17.12",
+    "@types/node-fetch": "^2.5.12",
+    "@types/pako": "^1.0.2",
+    "ts-node-dev": "^1.1.8",
+    "typescript": "^4.4.2"
+  },
+  "scripts": {
+    "start:dev": "ts-node-dev --respawn --transpile-only ./src/main.ts"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/billsonnn/nitro-imager.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/billsonnn/nitro-imager/issues"
+  },
+  "homepage": "https://github.com/billsonnn/nitro-imager#readme"
+}
