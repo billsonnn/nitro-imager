@@ -27,7 +27,7 @@ export class Application extends NitroManager implements IApplication
 
         const image = await this._avatar.createAvatarImage('hd-207-14.lg-3216-1408.cc-3007-86-88.ha-3054-1408-1408.he-3079-64.ea-1402-0.ch-230-72.hr-110-40', AvatarScaleType.LARGE, 'M');
 
-        //image.setDirection(AvatarSetType.FULL, 2);
+        //image.setDirection(AvatarSetType.FULL, 4);
         const canvas = await image.getImage(AvatarSetType.FULL, false);
         console.log(canvas.toDataURL());
 

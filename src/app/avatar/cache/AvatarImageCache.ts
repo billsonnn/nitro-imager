@@ -470,14 +470,15 @@ export class AvatarImageCache
                 ty = (regPoint.y - data.rect.y);
             }
 
-            //ctx.save();
-            ctx.scale(scale, 1);
-            //ctx.transform(scale, 1, 0, 0, tx, ty);
-            ctx.drawImage(texture, tx, ty, texture.width, texture.height);
-            //ctx.restore();
+            ctx.save();
+            //ctx.fillStyle = ('#' + this.convertColorToHex(data.colorTransform));
+            ctx.transform(scale, 0, 0, 1, tx, ty);
+            ctx.drawImage(texture, 0, 0, data.rect.width, data.rect.height,);
+            ctx.restore();
 
             // set the color
             //console.log(canvas.toDataURL());
+            //console.log();
         }
 
         return new ImageData(canvas, new Rectangle(0, 0, canvas.width, canvas.height), point, isFlipped, null);

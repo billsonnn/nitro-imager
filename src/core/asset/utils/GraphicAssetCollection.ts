@@ -1,5 +1,5 @@
 import { Canvas, createCanvas, Image } from 'canvas';
-import { AdvancedMap } from '../../utils';
+import { AdvancedMap, Rectangle } from '../../utils';
 import { IAsset, IAssetData, IAssetPalette } from '../interfaces';
 import { GraphicAsset } from './GraphicAsset';
 import { GraphicAssetPalette } from './GraphicAssetPalette';
@@ -63,16 +63,100 @@ export class GraphicAssetCollection implements IGraphicAssetCollection
 
         for(const name in frames)
         {
-            const frame = frames[name];
+            const spritesheetFrame = frames[name];
 
-            if(!frame) continue;
+            if(!spritesheetFrame) continue;
 
-            const frameData = frame.frame;
+            const rect = spritesheetFrame.frame;
+            const sourceSize = (spritesheetFrame.trimmed && spritesheetFrame.sourceSize) ? spritesheetFrame.sourceSize : spritesheetFrame.frame;
+            const resolution = 1;
 
-            const canvas = createCanvas(frameData.w, frameData.h);
+            let frame: Rectangle = null;
+            let trim: Rectangle = null;
+
+            const orig = new Rectangle(
+                0,
+                0,
+                Math.floor(sourceSize.w) / resolution,
+                Math.floor(sourceSize.h) / resolution);
+
+            if(spritesheetFrame.rotated)
+            {
+                frame = new Rectangle(
+                    Math.floor(rect.x) / resolution,
+                    Math.floor(rect.y) / resolution,
+                    Math.floor(rect.h) / resolution,
+                    Math.floor(rect.w) / resolution);
+            }
+            else
+            {
+                frame = new Rectangle(
+                    Math.floor(rect.x) / resolution,
+                    Math.floor(rect.y) / resolution,
+                    Math.floor(rect.w) / resolution,
+                    Math.floor(rect.h) / resolution);
+            }
+
+            if (spritesheetFrame.trimmed && spritesheetFrame.spriteSourceSize)
+            {
+                trim = new Rectangle(
+                    Math.floor(spritesheetFrame.spriteSourceSize.x) / resolution,
+                    Math.floor(spritesheetFrame.spriteSourceSize.y) / resolution,
+                    Math.floor(rect.w) / resolution,
+                    Math.floor(rect.h) / resolution
+                );
+            }
+
+            const width = frame.width;
+            const height = frame.height;
+
+            let dx = 0;
+            let dy = 0;
+
+            if(trim)
+            {
+                dx = (trim.width / 2) + trim.x - (0 * orig.width);
+                dy = (trim.height / 2) + trim.y - (0 * orig.height);
+            }
+            else
+            {
+                dx = (0.5 - 0) * orig.width;
+                dy = (0.5 - 0) * orig.height;
+            }
+
+            dx -= width / 2;
+            dy -= height / 2;
+
+            const canvas = createCanvas(sourceSize.w, sourceSize.h);
             const ctx = canvas.getContext('2d');
 
-            ctx.drawImage(baseTexture, frameData.x, frameData.y, frameData.w, frameData.h, 0, 0, frameData.w, frameData.h);
+            ctx.drawImage(
+                baseTexture,
+                frame.x * resolution,
+                frame.y * resolution,
+                Math.floor(width * resolution),
+                Math.floor(height * resolution),
+                Math.floor(dx * resolution),
+                Math.floor(dy * resolution),
+                Math.floor(width * resolution),
+                Math.floor(height * resolution)
+            );
+
+            if(name.indexOf('h_std_hr_4_2_0') >= 0)
+            {
+                //console.log(spritesheetFrame);
+                console.log('h_std_hr_4_2_0');
+                console.log(canvas.toDataURL());
+                console.log();
+            }
+
+            if(name.indexOf('h_std_hrb_4_2_0') >= 0)
+            {
+                //console.log(frameData, source);
+                console.log('h_std_hrb_4_2_0');
+                console.log(canvas.toDataURL());
+                console.log();
+            }
 
             this._textures.add(name, canvas);
         }
