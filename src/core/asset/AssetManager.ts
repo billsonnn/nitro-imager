@@ -1,13 +1,12 @@
-import { Canvas } from 'canvas';
 import { NitroManager } from '../common';
-import { AdvancedMap, FileUtilities } from '../utils';
+import { AdvancedMap, FileUtilities, Texture } from '../utils';
 import { IAssetManager } from './IAssetManager';
 import { NitroBundle } from './NitroBundle';
 import { GraphicAssetCollection, IGraphicAsset, IGraphicAssetCollection } from './utils';
 
 export class AssetManager extends NitroManager implements IAssetManager
 {
-    private _textures: AdvancedMap<string, Canvas>;
+    private _textures: AdvancedMap<string, Texture>;
     private _collections: AdvancedMap<string, IGraphicAssetCollection>;
 
     constructor()
@@ -18,7 +17,7 @@ export class AssetManager extends NitroManager implements IAssetManager
         this._collections = new AdvancedMap();
     }
 
-    public getTexture(name: string): Canvas
+    public getTexture(name: string): Texture
     {
         if(!name) return null;
 
@@ -29,7 +28,7 @@ export class AssetManager extends NitroManager implements IAssetManager
         return existing;
     }
 
-    public setTexture(name: string, texture: Canvas): void
+    public setTexture(name: string, texture: Texture): void
     {
         if(!name || !texture) return;
 

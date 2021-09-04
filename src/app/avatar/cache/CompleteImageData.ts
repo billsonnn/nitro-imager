@@ -1,16 +1,17 @@
-﻿import { Point, Rectangle, Texture } from '../../../core';
+import { Canvas } from 'canvas';
+import { Point, Rectangle } from '../../../core';
 
-export class ImageData
+export class CompleteImageData
 {
-    private _texture: Texture;
+    private _image: Canvas;
     private _rect: Rectangle;
     private _regPoint: Point;
     private _flipH: boolean;
     private _colorTransform: number;
 
-    constructor(texture: Texture, rectangle: Rectangle, _arg_3: Point, flipH: boolean, color: number)
+    constructor(texture: Canvas, rectangle: Rectangle, _arg_3: Point, flipH: boolean, color: number)
     {
-        this._texture = texture;
+        this._image = texture;
         this._rect = rectangle;
         this._regPoint = _arg_3;
         this._flipH = flipH;
@@ -21,14 +22,14 @@ export class ImageData
 
     public dispose(): void
     {
-        this._texture = null;
+        this._image = null;
         this._regPoint = null;
         this._colorTransform = null;
     }
 
-    public get texture(): Texture
+    public get image(): Canvas
     {
-        return this._texture;
+        return this._image;
     }
 
     public get rect(): Rectangle

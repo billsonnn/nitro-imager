@@ -12,6 +12,7 @@ import { AvatarCanvas } from '../structure';
 import { AvatarImageActionCache } from './AvatarImageActionCache';
 import { AvatarImageBodyPartCache } from './AvatarImageBodyPartCache';
 import { AvatarImageDirectionCache } from './AvatarImageDirectionCache';
+import { CompleteImageData } from './CompleteImageData';
 import { ImageData } from './ImageData';
 
 export class AvatarImageCache
@@ -416,7 +417,7 @@ export class AvatarImageCache
             imageIndex--;
         }
 
-        return new AvatarImageBodyPartContainer(imageData.texture, offset, isCacheable);
+        return new AvatarImageBodyPartContainer(imageData.image, offset, isCacheable);
     }
 
     private convertColorToHex(k: number): string
@@ -429,7 +430,7 @@ export class AvatarImageCache
         return _local_2;
     }
 
-    private createUnionImage(imageDatas: ImageData[], isFlipped: boolean): ImageData
+    private createUnionImage(imageDatas: ImageData[], isFlipped: boolean): CompleteImageData
     {
         const bounds = new Rectangle();
 
@@ -470,10 +471,11 @@ export class AvatarImageCache
                 ty = (regPoint.y - data.rect.y);
             }
 
+            const tintedTexture = texture.getTintedWithMultiply(color);
+
             ctx.save();
-            //ctx.fillStyle = ('#' + this.convertColorToHex(data.colorTransform));
             ctx.transform(scale, 0, 0, 1, tx, ty);
-            ctx.drawImage(texture, 0, 0, data.rect.width, data.rect.height,);
+            ctx.drawImage(tintedTexture, 0, 0, data.rect.width, data.rect.height);
             ctx.restore();
 
             // set the color
@@ -481,6 +483,6 @@ export class AvatarImageCache
             //console.log();
         }
 
-        return new ImageData(canvas, new Rectangle(0, 0, canvas.width, canvas.height), point, isFlipped, null);
+        return new CompleteImageData(canvas, new Rectangle(0, 0, canvas.width, canvas.height), point, isFlipped, null);
     }
 }

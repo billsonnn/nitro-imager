@@ -1,11 +1,10 @@
-import { Canvas } from 'canvas';
-import { Rectangle } from '../../utils';
+import { Rectangle, Texture } from '../../utils';
 
 export interface IGraphicAsset
 {
     name: string;
     source: string;
-    texture: Canvas;
+    texture: Texture;
     usesPalette: boolean;
     x: number;
     y: number;

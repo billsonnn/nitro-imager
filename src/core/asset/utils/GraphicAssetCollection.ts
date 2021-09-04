@@ -1,5 +1,5 @@
-import { Canvas, createCanvas, Image } from 'canvas';
-import { AdvancedMap, Rectangle } from '../../utils';
+import { Image } from 'canvas';
+import { AdvancedMap, BaseTexture, Rectangle, Texture } from '../../utils';
 import { IAsset, IAssetData, IAssetPalette } from '../interfaces';
 import { GraphicAsset } from './GraphicAsset';
 import { GraphicAssetPalette } from './GraphicAssetPalette';
@@ -12,12 +12,12 @@ export class GraphicAssetCollection implements IGraphicAssetCollection
 
     private _name: string;
     private _data: IAssetData;
-    private _textures: AdvancedMap<string, Canvas>;
+    private _textures: AdvancedMap<string, Texture>;
     private _assets: AdvancedMap<string, GraphicAsset>;
     private _palettes: AdvancedMap<string, GraphicAssetPalette>;
     private _paletteAssetNames: string[];
 
-    constructor(data: IAssetData, baseTexture: Image)
+    constructor(data: IAssetData, image: Image)
     {
         if(!data) throw new Error('invalid_collection');
 
@@ -28,7 +28,12 @@ export class GraphicAssetCollection implements IGraphicAssetCollection
         this._palettes = new AdvancedMap();
         this._paletteAssetNames = [];
 
-        if(baseTexture) this.processBaseTexture(baseTexture);
+        if(image)
+        {
+            const baseTexture = new BaseTexture(image);
+
+            this.processBaseTexture(baseTexture);
+        }
 
         this.define(data);
     }
@@ -57,7 +62,7 @@ export class GraphicAssetCollection implements IGraphicAssetCollection
         }
     }
 
-    private processBaseTexture(baseTexture: Image): void
+    private processBaseTexture(baseTexture: BaseTexture): void
     {
         const frames = this._data.spritesheet.frames;
 
@@ -107,58 +112,9 @@ export class GraphicAssetCollection implements IGraphicAssetCollection
                 );
             }
 
-            const width = frame.width;
-            const height = frame.height;
+            const texture = new Texture(baseTexture, frame, orig, trim);
 
-            let dx = 0;
-            let dy = 0;
-
-            if(trim)
-            {
-                dx = (trim.width / 2) + trim.x - (0 * orig.width);
-                dy = (trim.height / 2) + trim.y - (0 * orig.height);
-            }
-            else
-            {
-                dx = (0.5 - 0) * orig.width;
-                dy = (0.5 - 0) * orig.height;
-            }
-
-            dx -= width / 2;
-            dy -= height / 2;
-
-            const canvas = createCanvas(sourceSize.w, sourceSize.h);
-            const ctx = canvas.getContext('2d');
-
-            ctx.drawImage(
-                baseTexture,
-                frame.x * resolution,
-                frame.y * resolution,
-                Math.floor(width * resolution),
-                Math.floor(height * resolution),
-                Math.floor(dx * resolution),
-                Math.floor(dy * resolution),
-                Math.floor(width * resolution),
-                Math.floor(height * resolution)
-            );
-
-            if(name.indexOf('h_std_hr_4_2_0') >= 0)
-            {
-                //console.log(spritesheetFrame);
-                console.log('h_std_hr_4_2_0');
-                console.log(canvas.toDataURL());
-                console.log();
-            }
-
-            if(name.indexOf('h_std_hrb_4_2_0') >= 0)
-            {
-                //console.log(frameData, source);
-                console.log('h_std_hrb_4_2_0');
-                console.log(canvas.toDataURL());
-                console.log();
-            }
-
-            this._textures.add(name, canvas);
+            this._textures.add(name, texture);
         }
     }
 
@@ -242,7 +198,7 @@ export class GraphicAssetCollection implements IGraphicAssetCollection
         }
     }
 
-    private createAsset(name: string, source: string, texture: Canvas, flipH: boolean, flipV: boolean, x: number, y: number, usesPalette: boolean): boolean
+    private createAsset(name: string, source: string, texture: Texture, flipH: boolean, flipV: boolean, x: number, y: number, usesPalette: boolean): boolean
     {
         if(this._assets.getValue(name)) return false;
 
@@ -253,7 +209,7 @@ export class GraphicAssetCollection implements IGraphicAssetCollection
         return true;
     }
 
-    private replaceAsset(name: string, source: string, texture: Canvas, flipH: boolean, flipV: boolean, x: number, y: number, usesPalette: boolean): boolean
+    private replaceAsset(name: string, source: string, texture: Texture, flipH: boolean, flipV: boolean, x: number, y: number, usesPalette: boolean): boolean
     {
         const existing = this._assets.getValue(name);
 
@@ -350,7 +306,7 @@ export class GraphicAssetCollection implements IGraphicAssetCollection
         existing.recycle();
     }
 
-    public getLibraryAsset(name: string): Canvas
+    public getLibraryAsset(name: string): Texture
     {
         if(!name) return null;
 
@@ -386,7 +342,7 @@ export class GraphicAssetCollection implements IGraphicAssetCollection
         return this._data;
     }
 
-    public get textures(): AdvancedMap<string, Canvas>
+    public get textures(): AdvancedMap<string, Texture>
     {
         return this._textures;
     }

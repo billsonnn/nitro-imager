@@ -305,6 +305,8 @@ export class AvatarImage implements IAvatarImage
             partCount--;
         }
 
+        //CanvasUtilities.cropTransparentPixels(canvas);
+
         //if(this._avatarSpriteData && this._avatarSpriteData.paletteIsGrayscale) this.convertToGrayscale(container);
 
         return canvas;

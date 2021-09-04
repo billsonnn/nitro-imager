@@ -1,4 +1,4 @@
-import { Canvas } from 'canvas';
+import { Texture } from '../../utils';
 
 export class GraphicAssetPalette
 {
@@ -21,7 +21,7 @@ export class GraphicAssetPalette
 
     }
 
-    public applyPalette(texture: Canvas): Canvas
+    public applyPalette(texture: Texture): Texture
     {
         return null;
 
