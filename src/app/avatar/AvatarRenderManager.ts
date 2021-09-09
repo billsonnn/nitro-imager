@@ -46,7 +46,7 @@ export class AvatarRenderManager extends NitroManager implements IAvatarRenderMa
         this._structure.initPartSets(HabboAvatarPartSets.partSets);
         this._structure.initAnimation(HabboAvatarAnimations.animations);
         await this.loadActions();
-        this.loadFigureData();
+        await this.loadFigureData();
 
         this._aliasCollection = new AssetAliasCollection(this, this._assets);
 
