@@ -1,5 +1,4 @@
-import { createCanvas } from 'canvas';
-import { AdvancedMap, Point, Rectangle } from '../../../core';
+import { AdvancedMap, CanvasUtilities, Point, Rectangle } from '../../../core';
 import { IActiveActionData } from '../actions';
 import { AssetAliasCollection } from '../alias';
 import { AvatarAnimationLayerData } from '../animation';
@@ -78,7 +77,7 @@ export class AvatarImageCache
 
     public disposeInactiveActions(k: number = 60000): void
     {
-        const time = Date.now();
+        const time = 0;
 
         if(this._cache)
         {
@@ -437,7 +436,7 @@ export class AvatarImageCache
         for(const data of imageDatas) data && bounds.enlarge(data.offsetRect);
 
         const point = new Point(-(bounds.x), -(bounds.y));
-        const canvas = createCanvas(bounds.width, bounds.height);
+        const canvas = CanvasUtilities.createNitroCanvas(bounds.width, bounds.height);
         const ctx = canvas.getContext('2d');
 
         for(const data of imageDatas)
@@ -477,10 +476,6 @@ export class AvatarImageCache
             ctx.transform(scale, 0, 0, 1, tx, ty);
             ctx.drawImage(tintedTexture, 0, 0, data.rect.width, data.rect.height);
             ctx.restore();
-
-            // set the color
-            //console.log(canvas.toDataURL());
-            //console.log();
         }
 
         return new CompleteImageData(canvas, new Rectangle(0, 0, canvas.width, canvas.height), point, isFlipped, null);

@@ -1,5 +1,4 @@
-import fetch from 'node-fetch';
-import { AdvancedMap, IAssetManager } from '../../core';
+import { AdvancedMap, FileUtilities, IAssetManager } from '../../core';
 import { Application } from '../Application';
 import { AvatarAssetDownloadLibrary } from './AvatarAssetDownloadLibrary';
 import { AvatarStructure } from './AvatarStructure';
@@ -28,8 +27,8 @@ export class AvatarAssetDownloadManager
     {
         const url = Application.instance.getConfiguration<string>('avatar.figuremap.url');
 
-        const data = await fetch(url);
-        const json = await data.json();
+        const data = await FileUtilities.readFileAsString(url);
+        const json = JSON.parse(data);
 
         this.processFigureMap(json.libraries);
 
@@ -149,6 +148,6 @@ export class AvatarAssetDownloadManager
     {
         if(!library || library.isLoaded) return;
 
-        await library.downloadAsset();
+        if(!await library.downloadAsset()) return;
     }
 }

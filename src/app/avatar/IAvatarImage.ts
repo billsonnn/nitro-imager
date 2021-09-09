@@ -1,5 +1,6 @@
 import { Canvas } from 'canvas';
 import { IDisposable, IGraphicAsset } from '../../core';
+import { IActiveActionData } from './actions';
 import { IAnimationLayerData, IAvatarDataContainer, ISpriteDataContainer } from './animation';
 import { IAvatarFigureContainer } from './IAvatarFigureContainer';
 import { IPartColor } from './structure';
@@ -12,7 +13,7 @@ export interface IAvatarImage extends IDisposable
     getScale(): string;
     getSprites(): ISpriteDataContainer[];
     getLayerData(_arg_1: ISpriteDataContainer): IAnimationLayerData;
-    getImage(setType: string, hightlight: boolean, scale?: number, cache?: boolean): Promise<Canvas>;
+    getImage(setType: string, bgColor?: number, hightlight?: boolean, scale?: number, cache?: boolean): Promise<Canvas>;
     getAsset(_arg_1: string): IGraphicAsset;
     getDirection(): number;
     getFigure(): IAvatarFigureContainer;
@@ -27,5 +28,6 @@ export interface IAvatarImage extends IDisposable
     forceActionUpdate(): void;
     animationHasResetOnToggle: boolean;
     resetAnimationFrameCounter(): void;
-    mainAction: string;
+    mainAction: IActiveActionData;
+    getTotalFrameCount(): number;
 }

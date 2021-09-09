@@ -99,4 +99,25 @@ export class CanvasUtilities
 
         return canvas;
     }
+
+    public static scaleCanvas(canvas: Canvas, scaleX: number, scaleY: number): Canvas
+    {
+        const tempCanvas = this.createNitroCanvas((canvas.width * scaleX), (canvas.height * scaleY));
+        const ctx = tempCanvas.getContext('2d');
+
+        ctx.scale(scaleX, scaleY);
+        ctx.drawImage(canvas, 0, 0, canvas.width, canvas.height);
+
+        return tempCanvas;
+    }
+
+    public static createNitroCanvas(width: number, height: number): Canvas
+    {
+        const canvas = createCanvas(width, height);
+        const ctx = canvas.getContext('2d');
+
+        ctx.imageSmoothingEnabled = false;
+
+        return canvas;
+    }
 }

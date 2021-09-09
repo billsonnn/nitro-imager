@@ -42,17 +42,19 @@ export class AvatarAssetDownloadLibrary
         return false;
     }
 
-    public async downloadAsset(): Promise<void>
+    public async downloadAsset(): Promise<boolean>
     {
-        if(!this._assets || (this._state === AvatarAssetDownloadLibrary.LOADING)) return;
+        if(!this._assets || (this._state === AvatarAssetDownloadLibrary.LOADING)) return false;
 
-        if(this.checkIfAssetLoaded()) return;
+        if(this.checkIfAssetLoaded()) return false;
 
         this._state = AvatarAssetDownloadLibrary.LOADING;
 
-        await this._assets.downloadAsset(this._downloadUrl);
+        if(!await this._assets.downloadAsset(this._downloadUrl)) return false;
 
         this._state = AvatarAssetDownloadLibrary.LOADED;
+
+        return true;
     }
 
     public get libraryName(): string

@@ -1,6 +1,5 @@
-﻿import fetch from 'node-fetch';
-import { NitroManager } from '../common';
-import { AdvancedMap } from '../utils';
+﻿import { NitroManager } from '../common';
+import { AdvancedMap, FileUtilities } from '../utils';
 import { IConfigurationManager } from './IConfigurationManager';
 
 export class ConfigurationManager extends NitroManager implements IConfigurationManager
@@ -16,17 +15,17 @@ export class ConfigurationManager extends NitroManager implements IConfiguration
 
     protected async onInit(): Promise<void>
     {
-        await this.loadConfigurationFromUrl((process.env.CONFIG_URL || null));
+        await this.loadConfigurationFromUrl('./config.json');
     }
 
     private async loadConfigurationFromUrl(url: string): Promise<void>
     {
-        if(!url || (url === '')) return Promise.reject('invalid_config_url');
+        if(!url || (url === '')) throw new Error(`Invalid configuration url: ${ url }`);
 
         try
         {
-            const response = await fetch(url);
-            const json = await response.json();
+            const response = await FileUtilities.readFileAsString(url);
+            const json = JSON.parse(response);
 
             if(!this.parseConfiguration(json)) return Promise.reject('invalid_config');
         }

@@ -1,5 +1,5 @@
-import { Canvas, createCanvas } from 'canvas';
-import { IGraphicAsset } from '../../core';
+import { Canvas } from 'canvas';
+import { CanvasUtilities, IGraphicAsset } from '../../core';
 import { ActiveActionData, IActionDefinition, IActiveActionData } from './actions';
 import { AssetAliasCollection } from './alias';
 import { IAnimationLayerData, IAvatarDataContainer, ISpriteDataContainer } from './animation';
@@ -168,7 +168,7 @@ export class AvatarImage implements IAvatarImage
 
     public getCanvasOffsets(): number[]
     {
-        return this._canvasOffsets;
+        return (this._canvasOffsets || [ 0, 0, 0 ]);
     }
 
     public getLayerData(k: ISpriteDataContainer): IAnimationLayerData
@@ -184,6 +184,26 @@ export class AvatarImage implements IAvatarImage
     public resetAnimationFrameCounter(): void
     {
         this._frameCounter = 0;
+    }
+
+    public getTotalFrameCount(): number
+    {
+        const actions = this._sortedActions;
+
+        let frames = this._animationFrameCount;
+
+        for(const action of actions)
+        {
+            const animation = this._structure.animationManager.getAnimation(((action.definition.state + '.') + action.actionParameter));
+
+            if(!animation) continue;
+            
+            const frameCount = animation.frameCount(action.overridingAction);
+
+            frames = Math.max(frames, frameCount);
+        }
+
+        return frames;
     }
 
     private getFullImageCacheKey(): string
@@ -257,7 +277,7 @@ export class AvatarImage implements IAvatarImage
         }
     }
 
-    public async getImage(setType: string, hightlight: boolean, scale: number = 1): Promise<Canvas>
+    public async getImage(setType: string, bgColor: number = 0, hightlight: boolean = false, scale: number = 1): Promise<Canvas>
     {
         if(!this._mainAction) return null;
 
@@ -269,8 +289,15 @@ export class AvatarImage implements IAvatarImage
 
         const bodyParts = this.getBodyParts(setType, this._mainAction.definition.geometryType, this._mainDirection);
 
-        const canvas = createCanvas(avatarCanvas.width, avatarCanvas.height);
+        const canvas = CanvasUtilities.createNitroCanvas(avatarCanvas.width, avatarCanvas.height);
         const ctx = canvas.getContext('2d');
+
+        if(bgColor > 0)
+        {
+            ctx.fillStyle = ctx.fillStyle = `#${(`00000${(bgColor | 0).toString(16)}`).substr(-6)}`;
+            ctx.fillRect(0, 0, avatarCanvas.width, avatarCanvas.height);
+            ctx.fillStyle = null;
+        }
 
         let partCount   = (bodyParts.length - 1);
 
@@ -296,7 +323,6 @@ export class AvatarImage implements IAvatarImage
                     point.y += avatarCanvas.regPoint.y;
 
                     ctx.save();
-                    ctx.scale(scale, 1);
                     ctx.drawImage(part.image, point.x, point.y, part.image.width, part.image.height);
                     ctx.restore();
                 }
@@ -304,6 +330,11 @@ export class AvatarImage implements IAvatarImage
 
             partCount--;
         }
+
+        if(scale !== 1) return CanvasUtilities.scaleCanvas(canvas, scale, scale);
+
+        // canvas.width *= scale;
+        // canvas.height *= scale;
 
         //CanvasUtilities.cropTransparentPixels(canvas);
 
@@ -362,7 +393,10 @@ export class AvatarImage implements IAvatarImage
         {
             if(k.actionType === AvatarAction.EFFECT)
             {
-                if(!this._effectManager.isAvatarEffectReady(parseInt(k.actionParameter))) await this._effectManager.downloadAvatarEffect(parseInt(k.actionParameter));
+                if(!this._effectManager.isAvatarEffectReady(parseInt(k.actionParameter)))
+                {
+                    await this._effectManager.downloadAvatarEffect(parseInt(k.actionParameter));
+                }
             }
         }
 
@@ -580,7 +614,7 @@ export class AvatarImage implements IAvatarImage
     {
         if(!this._sortedActions == null) return;
 
-        const _local_3: number    = Date.now();
+        const _local_3: number    = 0;
         const _local_4: string[]  = [];
 
         for(const k of this._sortedActions) _local_4.push(k.actionType);
@@ -736,8 +770,8 @@ export class AvatarImage implements IAvatarImage
         return this._animationHasResetOnToggle;
     }
 
-    public get mainAction(): string
+    public get mainAction(): IActiveActionData
     {
-        return this._mainAction.actionType;
+        return this._mainAction;
     }
 }

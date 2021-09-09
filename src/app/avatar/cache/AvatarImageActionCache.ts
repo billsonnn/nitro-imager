@@ -10,7 +10,7 @@ export class AvatarImageActionCache
     {
         this._cache = new AdvancedMap();
 
-        this.setLastAccessTime(Date.now());
+        this.setLastAccessTime(0);
     }
 
     public dispose(): void

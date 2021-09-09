@@ -96,6 +96,7 @@ export class AssetManager extends NitroManager implements IAssetManager
         {
             try
             {
+                this.logger.log('Downloading: ' + url);
                 const buffer = await FileUtilities.readFileAsBuffer(url);
                 const bundle = await NitroBundle.from(buffer);
 

@@ -18,9 +18,17 @@ export class NitroCore extends NitroManager implements INitroCore
 
     protected async onInit(): Promise<void>
     {
-        if(this._configuration) await this._configuration.init();
+        try
+        {
+            if(this._configuration) await this._configuration.init();
 
-        if(this._asset) await this._asset.init();
+            if(this._asset) await this._asset.init();
+        }
+
+        catch(err)
+        {
+            this.logger.error(err.message || err);
+        }
     }
 
     protected async onDispose(): Promise<void>

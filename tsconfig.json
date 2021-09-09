@@ -1,0 +1,27 @@
+{
+    "compilerOptions": {
+        "module": "commonjs",
+        "declaration": false,
+        "noImplicitAny": false,
+        "noUnusedLocals": false,
+        "removeComments": true,
+        "noLib": false,
+        "emitDecoratorMetadata": true,
+        "experimentalDecorators": true,
+        "resolveJsonModule": true,
+        "target": "es6",
+        "sourceMap": false,
+        "allowJs": false,
+        "baseUrl": "./src",
+        "outDir": "./dist"
+    },
+    "include": [
+        "src",
+        "index.ts",
+        "config.json"
+    ],
+    "exclude": [
+        "node_modules",
+        "dist"
+    ]
+}

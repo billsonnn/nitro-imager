@@ -1,5 +1,4 @@
-import fetch from 'node-fetch';
-import { IAssetManager, IGraphicAsset, NitroManager } from '../../core';
+import { FileUtilities, IAssetManager, IGraphicAsset, NitroManager } from '../../core';
 import { Application } from '../Application';
 import { AssetAliasCollection } from './alias';
 import { AvatarAssetDownloadManager } from './AvatarAssetDownloadManager';
@@ -18,7 +17,7 @@ import { IFigurePartSet, IStructureData } from './structure';
 
 export class AvatarRenderManager extends NitroManager implements IAvatarRenderManager
 {
-    private static DEFAULT_FIGURE: string = 'hd-99999-99999';
+    public static DEFAULT_FIGURE: string = 'hd-99999-99999';
 
     private _aliasCollection: AssetAliasCollection;
 
@@ -87,9 +86,9 @@ export class AvatarRenderManager extends NitroManager implements IAvatarRenderMa
 
         const url = Application.instance.getConfiguration<string>('avatar.actions.url');
 
-        const data = await fetch(url);
+        const data = await FileUtilities.readFileAsString(url);
 
-        this._structure.updateActions(await data.json());
+        this._structure.updateActions(JSON.parse(data));
     }
 
     private async loadFigureData(): Promise<void>
@@ -100,9 +99,9 @@ export class AvatarRenderManager extends NitroManager implements IAvatarRenderMa
 
         const url = Application.instance.getConfiguration<string>('avatar.figuredata.url');
 
-        const data = await fetch(url);
+        const data = await FileUtilities.readFileAsString(url);
 
-        this._structure.figureData.appendJSON(await data.json());
+        this._structure.figureData.appendJSON(JSON.parse(data));
     }
 
     public createFigureContainer(figure: string): IAvatarFigureContainer
@@ -306,5 +305,10 @@ export class AvatarRenderManager extends NitroManager implements IAvatarRenderMa
     public get downloadManager(): AvatarAssetDownloadManager
     {
         return this._avatarAssetDownloadManager;
+    }
+
+    public get effectManager(): EffectAssetDownloadManager
+    {
+        return this._effectAssetDownloadManager;
     }
 }

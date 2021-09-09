@@ -25,7 +25,17 @@ export class NitroManager extends Disposable implements INitroManager
 
         this._isLoading = true;
 
-        await this.onInit();
+        try
+        {
+            await this.onInit();
+        }
+
+        catch(err)
+        {
+            this.logger.error(err.message || err);
+
+            return;
+        }
 
         this._isLoaded = true;
         this._isLoading = false;

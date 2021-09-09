@@ -1,6 +1,7 @@
 import { IAssetManager, IGraphicAsset, INitroManager } from '../../core';
 import { AvatarAssetDownloadManager } from './AvatarAssetDownloadManager';
 import { AvatarStructure } from './AvatarStructure';
+import { EffectAssetDownloadManager } from './EffectAssetDownloadManager';
 import { IAvatarFigureContainer } from './IAvatarFigureContainer';
 import { IAvatarImage } from './IAvatarImage';
 import { IStructureData } from './structure/IStructureData';
@@ -20,4 +21,5 @@ export interface IAvatarRenderManager extends INitroManager
     structure: AvatarStructure;
     structureData: IStructureData;
     downloadManager: AvatarAssetDownloadManager;
+    effectManager: EffectAssetDownloadManager;
 }

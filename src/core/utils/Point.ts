@@ -14,13 +14,6 @@ export class Point
         return new Point(this.x, this.y);
     }
 
-    public copyFrom(p: Point): Point
-    {
-        this.add(p.x, p.y);
-
-        return this;
-    }
-
     public equals(p: Point): boolean
     {
         return ((p.x === this.x) && (p.y === this.y));
@@ -32,5 +25,15 @@ export class Point
         this.y = y;
         
         return this;
+    }
+
+    public add(point: Point): Point
+    {
+        const clone = this.clone();
+        
+        clone.x += point.x;
+        clone.y += point.y;
+
+        return clone;
     }
 }

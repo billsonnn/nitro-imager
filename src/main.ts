@@ -1,5 +1,3 @@
-require('dotenv').config();
-
 import { Application } from './app';
 import { NitroCore } from './core';
 

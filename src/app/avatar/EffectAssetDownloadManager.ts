@@ -1,5 +1,4 @@
-import fetch from 'node-fetch';
-import { AdvancedMap, IAssetManager } from '../../core';
+import { AdvancedMap, FileUtilities, IAssetManager } from '../../core';
 import { Application } from '../Application';
 import { AvatarStructure } from './AvatarStructure';
 import { EffectAssetDownloadLibrary } from './EffectAssetDownloadLibrary';
@@ -27,8 +26,8 @@ export class EffectAssetDownloadManager
     {
         const url = Application.instance.getConfiguration<string>('avatar.effectmap.url');
 
-        const data = await fetch(url);
-        const json = await data.json();
+        const data = await FileUtilities.readFileAsString(url);
+        const json = JSON.parse(data);
 
         this.processEffectMap(json.effects);
 
@@ -118,6 +117,8 @@ export class EffectAssetDownloadManager
     {
         if(!library || library.isLoaded) return;
 
-        await library.downloadAsset();
+        if(!await library.downloadAsset()) return;
+
+        this._structure.registerAnimation(library.animation);
     }
 }

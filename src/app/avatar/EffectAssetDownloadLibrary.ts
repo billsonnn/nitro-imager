@@ -44,21 +44,23 @@ export class EffectAssetDownloadLibrary
         return false;
     }
 
-    public async downloadAsset(): Promise<void>
+    public async downloadAsset(): Promise<boolean>
     {
         if(!this._assets || (this._state === EffectAssetDownloadLibrary.LOADING)) return;
 
-        if(this.checkIfAssetLoaded()) return;
+        if(this.checkIfAssetLoaded()) return true;
 
         this._state = EffectAssetDownloadLibrary.LOADING;
 
-        await this._assets.downloadAsset(this._downloadUrl);
+        if(!await this._assets.downloadAsset(this._downloadUrl)) return false;
 
         const collection = this._assets.getCollection(this._libraryName);
 
         if(collection) this._animation = collection.data.animations;
 
         this._state = EffectAssetDownloadLibrary.LOADED;
+
+        return true;
     }
 
     public get libraryName(): string
