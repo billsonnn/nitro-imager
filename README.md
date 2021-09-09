@@ -4,8 +4,6 @@ This tool serves as a server-side habbo-imager using the same avatar generator f
 
 ## Configuration
 
-**Make sure you run ``npm i`` before first use.**
-
 You must configure your urls in `config.json`
 
 Your figuredata, figuremap, effectmap, & HabboAvatarActions can safely point to a remote URL without worrying about performance.
@@ -13,6 +11,36 @@ Your figuredata, figuremap, effectmap, & HabboAvatarActions can safely point to 
 You should set all download urls to local absolute paths on your system, this will allow for faster downloading of figures. However, you may point to remote urls as well.
 
 You must also set an absolute path to a location where rendered figures can save to. This can be a private folder that is not accessible from the web.
+
+## Running the server
+
+**Make sure you run ``npm i`` before first use.**
+
+You must compile the server by running ``npm run build``
+
+To start the server you must run ``npm start``
+
+The server will run on the desired host & port as set in the config. You must setup a reverse proxy on your server to make the imager publicly accessible.
+
+NGINX Example
+
+	server {
+		listen 80;
+		listen [::]:80;
+		
+		listen 443;
+		listen [::]:443;
+		
+		server_name habbo-imaging.website.com;
+		
+		location / {
+			proxy_pass                  http://localhost:1338;
+			proxy_set_header        Host $host;
+			proxy_set_header        X-Real-IP $remote_addr;
+			proxy_set_header        X-Forwarded-For $proxy_add_x_forwarded_for;
+		}
+	}
+
 
 ## URL paramaters
 
