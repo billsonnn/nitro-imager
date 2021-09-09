@@ -30,12 +30,12 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/billsonnn/nitro-imager.git"
+    "url": "git+https://git.krews.org/nitro/nitro-imager.git"
   },
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/billsonnn/nitro-imager/issues"
+    "url": "https://git.krews.org/nitro/nitro-imager/issues"
   },
-  "homepage": "https://github.com/billsonnn/nitro-imager#readme"
+  "homepage": "https://git.krews.org/nitro/nitro-imager"
 }
