@@ -19,21 +19,21 @@ export const HabboImagingRouterGet = async (request: Request<any, any, any, Requ
         const avatarString = BuildFigureOptionsStringRequest(buildOptions);
         const saveFile = new File(`${ directory.path }/${ avatarString }.${ buildOptions.imageFormat }`);
 
-        if(saveFile.exists())
-        {
-            const buffer = await FileUtilities.readFileAsBuffer(saveFile.path);
+        // if(saveFile.exists())
+        // {
+        //     const buffer = await FileUtilities.readFileAsBuffer(saveFile.path);
 
-            if(buffer)
-            {
-                response
-                    .writeHead(200, {
-                        'Content-Type': ((buildOptions.imageFormat === 'gif') ? 'image/gif' : 'image/png')
-                    })
-                    .end(buffer);
-            }
+        //     if(buffer)
+        //     {
+        //         response
+        //             .writeHead(200, {
+        //                 'Content-Type': ((buildOptions.imageFormat === 'gif') ? 'image/gif' : 'image/png')
+        //             })
+        //             .end(buffer);
+        //     }
 
-            return;
-        }
+        //     return;
+        // }
 
         if(buildOptions.effect > 0)
         {
@@ -184,8 +184,6 @@ function ProcessAvatarSprites(canvas: Canvas, avatar: IAvatarImage, avatarOffset
 
     for(const sprite of avatar.getSprites())
     {
-        if(sprite.id === 'avatar') continue;
-        
         const layerData = avatar.getLayerData(sprite);
 
         let offsetX = sprite.getDirectionOffsetX(avatar.getDirection());
@@ -221,14 +219,19 @@ function ProcessAvatarSprites(canvas: Canvas, avatar: IAvatarImage, avatarOffset
         
         const texture = asset.texture;
 
-        let x = ((canvasOffset.x - (1 * asset.offsetX)) + offsetX);
-        let y = ((canvasOffset.y - (1 * asset.offsetY)) + offsetY);
+        let x = canvasOffset.x - (-(asset.offsetX));
+        let y = canvasOffset.y - (-(asset.offsetY));
+
+        x += offsetX;
+        y += offsetY;
+
+        console.log(avatarOffset);
 
         ctx.save();
 
         if(sprite.ink === 33) ctx.globalCompositeOperation = 'lighter';
         
-        ctx.transform(1, 0, 0, 1, (x - avatarOffset.x), (y - avatarOffset.y));
+        ctx.transform(1, 0, 0, 1, (x - avatarOffset.x), y);
         ctx.drawImage(texture.drawableCanvas, 0, 0, texture.width, texture.height);
 
         ctx.restore();

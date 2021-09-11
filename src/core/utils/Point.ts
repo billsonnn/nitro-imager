@@ -31,8 +31,11 @@ export class Point
     {
         const clone = this.clone();
         
-        clone.x += point.x;
-        clone.y += point.y;
+        if(point)
+        {
+            clone.x += point.x;
+            clone.y += point.y;
+        }
 
         return clone;
     }

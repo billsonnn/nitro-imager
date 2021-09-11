@@ -12,17 +12,17 @@ export const HabboAvatarGeometry = {
                 'geometries': [
                     {
                         'id': 'vertical',
-                        'width': 64,
-                        'height': 110,
+                        'width': 90,
+                        'height': 130,
                         'dx': 0,
                         'dy': 6
                     },
                     {
                         'id': 'sitting',
-                        'width': 64,
-                        'height': 110,
+                        'width': 90,
+                        'height': 130,
                         'dx': 0,
-                        'dy': 6
+                        'dy': 0
                     },
                     {
                         'id': 'horizontal',
