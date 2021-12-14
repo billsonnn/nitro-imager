@@ -14,7 +14,7 @@ export const HabboImagingRouterGet = async (request: Request<any, any, any, Requ
     try
     {
         const buildOptions = BuildFigureOptionsRequest(query);
-        const saveDirectory = Application.instance.getConfiguration<string>('avatar.save.path');
+        const saveDirectory = (process.env.AVATAR_SAVE_PATH as string);
         const directory = FileUtilities.getDirectory(saveDirectory);
         const avatarString = BuildFigureOptionsStringRequest(buildOptions);
         const saveFile = new File(`${ directory.path }/${ avatarString }.${ buildOptions.imageFormat }`);

@@ -25,7 +25,9 @@ export class AvatarAssetDownloadManager
 
     public async loadFigureMap(): Promise<void>
     {
-        const url = Application.instance.getConfiguration<string>('avatar.figuremap.url');
+        const url = (process.env.AVATAR_FIGUREMAP_URL as string);
+
+        if(!url || !url.length) return Promise.reject('invalid_figuremap_url');
 
         const data = await FileUtilities.readFileAsString(url);
         const json = JSON.parse(data);
@@ -39,7 +41,9 @@ export class AvatarAssetDownloadManager
     {
         if(!data) return;
 
-        const avatarAssetUrl = Application.instance.getConfiguration<string>('avatar.asset.url');
+        const url = (process.env.AVATAR_ASSET_URL as string);
+
+        if(!url || !url.length) return;
 
         for(const library of data)
         {
@@ -52,7 +56,7 @@ export class AvatarAssetDownloadManager
 
             this._libraryNames.push(id);
 
-            const downloadLibrary = new AvatarAssetDownloadLibrary(id, revision, this._assets, avatarAssetUrl);
+            const downloadLibrary = new AvatarAssetDownloadLibrary(id, revision, this._assets, url);
 
             for(const part of library.parts)
             {

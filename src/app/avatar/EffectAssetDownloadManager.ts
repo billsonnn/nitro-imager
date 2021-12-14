@@ -24,7 +24,9 @@ export class EffectAssetDownloadManager
 
     public async loadEffectMap(): Promise<void>
     {
-        const url = Application.instance.getConfiguration<string>('avatar.effectmap.url');
+        const url = (process.env.AVATAR_EFFECTMAP_URL as string);
+
+        if(!url || !url.length) return Promise.reject('invalid_effectmap_url');
 
         const data = await FileUtilities.readFileAsString(url);
         const json = JSON.parse(data);
@@ -38,7 +40,9 @@ export class EffectAssetDownloadManager
     {
         if(!data) return;
 
-        const avatarEffectAssetUrl = Application.instance.getConfiguration<string>('avatar.asset.effect.url');
+        const url = (process.env.AVATAR_ASSET_EFFECT_URL as string);
+
+        if(!url || !url.length) return;
 
         for(const effect of data)
         {
@@ -52,7 +56,7 @@ export class EffectAssetDownloadManager
 
             this._libraryNames.push(lib);
 
-            const downloadLibrary = new EffectAssetDownloadLibrary(lib, revision, this._assets, avatarEffectAssetUrl);
+            const downloadLibrary = new EffectAssetDownloadLibrary(lib, revision, this._assets, url);
 
             let existing = this._effectMap.getValue(id);
 

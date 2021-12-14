@@ -84,7 +84,9 @@ export class AvatarRenderManager extends NitroManager implements IAvatarRenderMa
             ]
         });
 
-        const url = Application.instance.getConfiguration<string>('avatar.actions.url');
+        const url = (process.env.AVATAR_ACTIONS_URL as string);
+
+        if(!url || !url.length) return Promise.reject('invalid_actions_url');
 
         const data = await FileUtilities.readFileAsString(url);
 
@@ -97,7 +99,9 @@ export class AvatarRenderManager extends NitroManager implements IAvatarRenderMa
 
         if(this._structure) this._structure.initFigureData(defaultFigureData);
 
-        const url = Application.instance.getConfiguration<string>('avatar.figuredata.url');
+        const url = (process.env.AVATAR_FIGUREDATA_URL as string);
+
+        if(!url || !url.length) return Promise.reject('invalid_figuredata_url');
 
         const data = await FileUtilities.readFileAsString(url);
 

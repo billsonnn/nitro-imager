@@ -1,15 +1,4 @@
 {
-    "api.host": "localhost",
-    "api.port": 3030,
-    "asset.url": "ABSOLUTE_ASSET_URL_WITHOUT_SLASH",
-    "gamedata.url": "${asset.url}/gamedata",
-    "avatar.save.path": "ABSOLUTE_PATH/saved-figures",
-    "avatar.actions.url": "${gamedata.url}/HabboAvatarActions.json",
-    "avatar.figuredata.url": "${gamedata.url}/FigureData.json",
-    "avatar.figuremap.url": "${gamedata.url}/FigureMap.json",
-    "avatar.effectmap.url": "${gamedata.url}/EffectMap.json",
-    "avatar.asset.url": "${asset.url}/bundled/figure/%libname%.nitro",
-    "avatar.asset.effect.url": "${asset.url}/bundled/effect/%libname%.nitro",
     "avatar.mandatory.libraries": [
         "bd:1",
         "li:0"

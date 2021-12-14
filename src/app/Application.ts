@@ -50,8 +50,8 @@ export class Application extends NitroManager implements IApplication
 
         router.use('/', HttpRouter);
 
-        const host = this.getConfiguration<string>('api.host');
-        const port = this.getConfiguration<number>('api.port');
+        const host = (process.env.API_HOST as string);
+        const port = parseInt(process.env.API_PORT);
 
         router.listen(port, host, () =>
         {
