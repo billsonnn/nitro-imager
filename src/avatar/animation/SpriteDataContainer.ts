@@ -16,7 +16,6 @@ export class SpriteDataContainer implements ISpriteDataContainer
 
     constructor(animation: IAnimation, sprite: IAssetAnimationSprite)
     {
-        console.log(sprite);
         this._animation = animation;
         this._id = sprite.id;
         this._ink = sprite.ink;

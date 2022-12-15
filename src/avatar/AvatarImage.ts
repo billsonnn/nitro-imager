@@ -306,8 +306,6 @@ export class AvatarImage implements IAvatarImage
             const set = bodyParts[partCount];
             const part = this._cache.getImageContainer(set, this._frameCounter);
 
-            console.log(part);
-
             if(part)
             {
                 const partCacheContainer = part.image;

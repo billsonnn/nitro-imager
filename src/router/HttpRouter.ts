@@ -18,7 +18,7 @@ export const HttpRouter = async (request: Request<any, any, any, RequestQuery>, 
         const avatarString = BuildFigureOptionsStringRequest(buildOptions);
         const saveFile = new File(`${ directory.path }/${ avatarString }.${ buildOptions.imageFormat }`);
 
-        /* if(saveFile.exists())
+        if(saveFile.exists())
         {
             const buffer = await FileUtilities.readFileAsBuffer(saveFile.path);
 
@@ -32,7 +32,7 @@ export const HttpRouter = async (request: Request<any, any, any, RequestQuery>, 
             }
 
             return;
-        } */
+        }
 
         if(buildOptions.effect > 0)
         {
