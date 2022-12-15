@@ -1,5 +1,5 @@
 import { Rectangle, Texture } from '../../utils';
-import { IGraphicAsset } from './IGraphicAsset';
+import { IGraphicAsset } from '../interfaces';
 
 export class GraphicAsset implements IGraphicAsset
 {

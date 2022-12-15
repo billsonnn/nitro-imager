@@ -15,31 +15,31 @@ export class CanvasUtilities
         const ctx = canvas.getContext('2d');
         const pixels = ctx.getImageData(0, 0, canvas.width, canvas.height);
         const length = pixels.data.length;
-        
+
         for(let i = 0; i < length; i += 4)
         {
             if(pixels.data[i+3] !== 0)
             {
                 const x = (i / 4) % canvas.width;
                 const y = ~~((i / 4) / canvas.width);
-      
+
                 if(bounds.top === null) bounds.top = y;
-                
-                if(bounds.left === null) bounds.left = x; 
-                else if (x < bounds.left) bounds.left = x;
-          
-                if(bounds.right === null) bounds.right = x; 
+
+                if(bounds.left === null) bounds.left = x;
+                else if(x < bounds.left) bounds.left = x;
+
+                if(bounds.right === null) bounds.right = x;
                 else if(bounds.right < x) bounds.right = x;
-          
+
                 if(bounds.bottom === null) bounds.bottom = y;
-                else if (bounds.bottom < y) bounds.bottom = y;
+                else if(bounds.bottom < y) bounds.bottom = y;
             }
         }
-        
+
         const trimHeight = (bounds.bottom - bounds.top);
         const trimWidth = (bounds.right - bounds.left);
         const trimmed = ctx.getImageData(bounds.left, bounds.top, trimWidth, trimHeight);
-      
+
         canvas.width = trimWidth;
         canvas.height = trimHeight;
         ctx.putImageData(trimmed, 0, 0);

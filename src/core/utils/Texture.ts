@@ -103,7 +103,7 @@ export class Texture
             Math.floor(width * this._baseTexture.resolution),
             Math.floor(height * this._baseTexture.resolution)
         );
-        
+
         ctx.globalCompositeOperation = 'destination-atop';
 
         ctx.drawImage(

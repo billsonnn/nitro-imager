@@ -1,6 +1,7 @@
 import { Texture } from '../../utils';
+import { IGraphicAssetPalette } from '../interfaces';
 
-export class GraphicAssetPalette
+export class GraphicAssetPalette implements IGraphicAssetPalette
 {
     private _palette: [ number, number, number ][];
     private _primaryColor: number;

@@ -23,14 +23,14 @@ export class Point
     {
         this.x = x;
         this.y = y;
-        
+
         return this;
     }
 
     public add(point: Point): Point
     {
         const clone = this.clone();
-        
+
         clone.x += point.x;
         clone.y += point.y;
 

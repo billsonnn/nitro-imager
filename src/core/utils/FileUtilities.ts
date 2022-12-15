@@ -1,6 +1,7 @@
 import { readFile } from 'fs';
 import fetch from 'node-fetch';
 import { promisify } from 'util';
+import { NitroLogger } from '../NitroLogger';
 import { File } from './File';
 
 const readFileAsync = promisify(readFile);
@@ -27,49 +28,43 @@ export class FileUtilities
     {
         if(!url) return null;
 
-        let content: Buffer = null;
+        NitroLogger.warn(`Loading: ${ url }`);
 
         if(url.startsWith('//')) url = ('https:' + url);
 
         if(url.startsWith('http'))
         {
             const data = await fetch(url);
+
+            if(data.status !== 200) throw new Error(`File not found: ${ url }`);
+
             const arrayBuffer = await data.arrayBuffer();
 
-            if(data.headers.get('Content-Type') !== 'application/octet-stream') return;
+            if(data.headers.get('Content-Type') !== 'application/octet-stream') throw new Error(`Invalid content-type: ${ url }`);
 
-            if(arrayBuffer) content = Buffer.from(arrayBuffer);
-        }
-        else
-        {
-            content = await readFileAsync(url);
+            return Buffer.from(arrayBuffer);
         }
 
-        return content;
+        return await readFileAsync(url);
     }
 
     public static async readFileAsString(url: string): Promise<string>
     {
-        if(!url) return null;
-
-        let content = null;
+        if(!url || !url.length) return null;
 
         if(url.startsWith('//')) url = ('https:' + url);
 
         if(url.startsWith('http'))
         {
             const data = await fetch(url);
-            if(data.status === 404) return null;
 
-            if(data) content = await data.text();
-        }
-        else
-        {
-            const data = await readFileAsync(url);
+            if(data.status !== 200) throw new Error(`File not found: ${ url }`);
 
-            content = data.toString('utf-8');
+            return await data.text();
         }
 
-        return content;
+        const data = await readFileAsync(url);
+
+        return data.toString('utf-8');
     }
 }

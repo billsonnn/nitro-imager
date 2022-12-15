@@ -1,21 +1,37 @@
-import { Application } from './app';
-import { NitroCore } from './core';
 
-const core = new NitroCore();
-const instance = new Application(core);
+import * as dotenv from 'dotenv';
+import express from 'express';
+import { AvatarRenderManager } from './avatar';
+import { ConfigurationManager, NitroLogger } from './core';
+import { HttpRouter } from './router';
+
+dotenv.config();
 
 async function init(): Promise<void>
 {
     try
     {
-        await instance.init();
+        NitroLogger.success('Starting Nitro Imager');
+
+        await ConfigurationManager.init();
+        await AvatarRenderManager.init();
+
+        const router = express();
+
+        router.get('/', HttpRouter);
+
+        const host = (process.env.API_HOST as string);
+        const port = parseInt(process.env.API_PORT);
+
+        router.listen(port, host, () =>
+        {
+            NitroLogger.success(`Server Started ${ host }:${ port }`);
+        });
     }
 
-    catch(err)
+    catch (err)
     {
-        console.error(err.message || err);
-
-        core.dispose();
+        NitroLogger.error(err.message || err);
     }
 }
 

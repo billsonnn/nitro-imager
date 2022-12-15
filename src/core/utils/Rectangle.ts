@@ -34,7 +34,7 @@ export class Rectangle
         rectangle.y = this.y;
         rectangle.width = this.width;
         rectangle.height = this.height;
-        
+
         return rectangle;
     }
 
@@ -102,7 +102,7 @@ export class Rectangle
 
         return this;
     }
-    
+
     public get left(): number
     {
         return this.x;

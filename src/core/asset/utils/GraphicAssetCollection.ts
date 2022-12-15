@@ -1,10 +1,8 @@
 import { Image } from 'canvas';
 import { AdvancedMap, BaseTexture, Rectangle, Texture } from '../../utils';
-import { IAsset, IAssetData, IAssetPalette } from '../interfaces';
+import { IAsset, IAssetData, IAssetPalette, IGraphicAsset, IGraphicAssetCollection } from '../interfaces';
 import { GraphicAsset } from './GraphicAsset';
 import { GraphicAssetPalette } from './GraphicAssetPalette';
-import { IGraphicAsset } from './IGraphicAsset';
-import { IGraphicAssetCollection } from './IGraphicAssetCollection';
 
 export class GraphicAssetCollection implements IGraphicAssetCollection
 {
@@ -102,7 +100,7 @@ export class GraphicAssetCollection implements IGraphicAssetCollection
                     Math.floor(rect.h) / resolution);
             }
 
-            if (spritesheetFrame.trimmed && spritesheetFrame.spriteSourceSize)
+            if(spritesheetFrame.trimmed && spritesheetFrame.spriteSourceSize)
             {
                 trim = new Rectangle(
                     Math.floor(spritesheetFrame.spriteSourceSize.x) / resolution,
