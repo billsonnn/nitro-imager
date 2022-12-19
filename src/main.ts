@@ -17,9 +17,10 @@ async function init(): Promise<void>
         await AvatarRenderManager.init();
 
         const router = express();
-
-        router.get('/', HttpRouter);
-
+		const urlpath = (process.env.IMAGER_PATH as string);
+		
+		router.get(urlpath, HttpRouter);
+		
         const host = (process.env.API_HOST as string);
         const port = parseInt(process.env.API_PORT);
 
